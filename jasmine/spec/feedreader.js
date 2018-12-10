@@ -55,11 +55,11 @@ $(function() {
 
         it('Menu visibility is toggled when menu icon is clicked.', function() {
             let menuIcon = $('.menu-icon-link');
-            spyOn(menuIcon, 'click').and.returnValue($('body').toggleClass('menu-hidden'));
-            menuIcon.click()
-            expect(($('body').hasClass('menu-hidden'))).not.toBe(true);
-            menuIcon.click()
-            expect(($('body').hasClass('menu-hidden'))).toBe(true);
+            //let spy = spyOn(menuIcon, 'click').and.returnValue($('body').toggleClass('menu-hidden'));
+            menuIcon.click();
+            expect($('body').hasClass('menu-hidden')).not.toBe(true);
+            menuIcon.click();
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
 
     });
