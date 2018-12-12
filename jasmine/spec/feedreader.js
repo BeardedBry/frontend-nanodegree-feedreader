@@ -64,6 +64,9 @@ $(function() {
 
     });
 
+
+    // Used concepts from https://matthewcranford.com/feed-reader-walkthrough-part-4-async-tests/ to workout the next two test suites.
+
     describe('Initial Entries', function(){
 
         beforeEach(function(done){
