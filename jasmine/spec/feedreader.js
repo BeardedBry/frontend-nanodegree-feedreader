@@ -41,7 +41,7 @@ $(function() {
             let menuIcon = $('.menu-icon-link');
             //let spy = spyOn(menuIcon, 'click').and.returnValue($('body').toggleClass('menu-hidden'));
             menuIcon.click();
-            expect($('body').hasClass('menu-hidden')).not.toBe(true);
+            expect($('body').hasClass('menu-hidden')).toBe(false);
             menuIcon.click();
             expect($('body').hasClass('menu-hidden')).toBe(true);
         });
@@ -59,8 +59,9 @@ $(function() {
         })
         it('LoadFeed is called and has atleast a single entry', function() {
             const feed = $('.feed');
-            //console.log(feed.children($('.entry')).length);
-            expect(feed.children($('.entry')).length > 0).toBe(true);
+            const entries = $('.feed .entry');
+            //console.log(entries.length);
+            expect(entries.length > 0).toBe(true);
         });
     })
 
@@ -76,15 +77,15 @@ $(function() {
             Array.from(feed.children()).forEach(function(entry) { 
                 firstFeed.push(entry.innerText);
             });
-        });
-        /* Loads the second feed, using the callback 'done' the expect statement wont run till this finishes */
+            /* Loads the second feed, using the callback 'done' the expect statement wont run till this finishes */
             loadFeed(1, done)
+        });
     });
 
         it('Content changes when new feed is loaded', function(){
             Array.from(feed.children()).forEach(function(entry, i){
-                //console.log('2nd: ' + entry.innerText);
-               // console.log('1st: ' + firstFeed[i]);
+                console.log('2nd: ' + entry.innerText);
+                console.log('1st: ' + firstFeed[i]);
                 expect(entry.innerText === firstFeed[i]).toBe(false);
             })
         })
