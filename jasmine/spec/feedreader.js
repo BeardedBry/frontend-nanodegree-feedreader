@@ -1,58 +1,42 @@
 /* feedreader.js
- *
  * This is the spec file that Jasmine will read and contains
  * all of the tests that will be run against your application.
  */
 
-/* We're placing all of our tests within the $() function,
- * since some of these tests may require DOM elements. We want
- * to ensure they don't run until the DOM is ready.
- */
 $(function() {
-    /* This is our first test suite - a test suite just contains
-    * a related set of tests. This suite is all about the RSS
-    * feeds definitions, the allFeeds variable in our application.
-    */
+    /* This test suite tests the RSS feeds definitions, and allFeeds Variable */
     describe('RSS Feeds', function() {
-        /* This is our first test - it tests to make sure that the
-         * allFeeds variable has been defined and that it is not
-         * empty. Experiment with this before you get started on
-         * the rest of this project. What happens when you change
-         * allFeeds in app.js to be an empty array and refresh the
-         * page?
-         */
+
+        /* Test checks that allFeeds are defined and not empty */
         it('are defined', function() {
             expect(allFeeds).toBeDefined();
             expect(allFeeds.length).not.toBe(0);
         });
 
+        /* Test checks that the URL's are defined and are not empty */
         it('have URL\'s', function() {
-            for(let x = 0; x < allFeeds.length; x++) {
-                expect(allFeeds[x].url).toBeDefined();
-                expect(allFeeds[x].url.length).toBeGreaterThan(11);
-            }
+            allFeeds.forEach(function(feeds) {
+                expect(feeds).toBeDefined();
+                expect(feeds.url.length).toBeGreaterThan(0);
+            });
         });
 
+        /* Test checks that the feed's names are defined and aren't empty */
         it('have Names\'s', function() {
-            for(let x = 0; x < allFeeds.length; x++) {
-                expect(allFeeds[x].name).toBeDefined();
-                expect(allFeeds[x].name.length).toBeGreaterThan(0);
-            }
+            allFeeds.forEach(function(feeds) {
+                expect(feeds.name).toBeDefined();
+                expect(feeds.name.length).toBeGreaterThan(0);
+            });
         });
-
-
-        /* TODO: Write a test that loops through each feed
-         * in the allFeeds object and ensures it has a name defined
-         * and that the name is not empty.
-         */
     });
 
     describe('The menu', function(){
-
+        /* Test checks that the Menu is hidden by default */
         it('Menu is hidden by default', function() {
             expect($('body').hasClass('menu-hidden')).toBe(true);
         });
 
+        /* Checks that the Menu is toggled when clicked */
         it('Menu visibility is toggled when menu icon is clicked.', function() {
             let menuIcon = $('.menu-icon-link');
             //let spy = spyOn(menuIcon, 'click').and.returnValue($('body').toggleClass('menu-hidden'));
@@ -66,34 +50,41 @@ $(function() {
 
 
     // Used concepts from https://matthewcranford.com/feed-reader-walkthrough-part-4-async-tests/ to workout the next two test suites.
-
+    /* Tests check that the loadfeed async function works. */
     describe('Initial Entries', function(){
 
+        /* beforeEach is run before each other test in the suite run */
         beforeEach(function(done){
             loadFeed(0, done);
         })
         it('LoadFeed is called and has atleast a single entry', function() {
             const feed = $('.feed');
-            expect(feed.children.length > 0).toBe(true);
+            //console.log(feed.children($('.entry')).length);
+            expect(feed.children($('.entry')).length > 0).toBe(true);
         });
     })
 
+    /* Checks that the content changes when a new feed is loaded */
     describe('New Feed Selection', function(){
         
         const feed = $('.feed');
         const firstFeed = [];
 
-        beforeEach(function(done){ 
-            loadFeed(0);
+        /* loads the first feed and stores it into an Array, Loads the new feed */
+        beforeEach(function(done){
+            loadFeed(0, function(){
             Array.from(feed.children()).forEach(function(entry) { 
                 firstFeed.push(entry.innerText);
             });
-            loadFeed(1, done);
-        })
+        });
+        /* Loads the second feed, using the callback 'done' the expect statement wont run till this finishes */
+            loadFeed(1, done)
+    });
 
         it('Content changes when new feed is loaded', function(){
             Array.from(feed.children()).forEach(function(entry, i){
-                console.log(entry);
+                //console.log('2nd: ' + entry.innerText);
+               // console.log('1st: ' + firstFeed[i]);
                 expect(entry.innerText === firstFeed[i]).toBe(false);
             })
         })
@@ -101,10 +92,4 @@ $(function() {
     })
 
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
-
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
 }());
